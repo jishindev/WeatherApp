@@ -14,40 +14,39 @@ android {
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled = true
     }
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
-
     sourceSets["main"].java.srcDir("src/main/kotlin")
 }
 
 dependencies {
 
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-
     implementation(kotlin("stdlib-jdk7", version = "1.3.21"))
 
     // Core
     implementation("androidx.appcompat:appcompat:1.0.2")
     implementation("androidx.core:core-ktx:1.0.1")
+    implementation("com.android.support:multidex:1.0.3")
 
     // Design
     implementation("androidx.constraintlayout:constraintlayout:1.1.3")
     implementation("com.google.android.material:material:1.0.0")
 
     // Lifecycle - ViewModel and LiveData
-    implementation("android.arch.lifecycle:extensions:1.1.1")
-    kapt("android.arch.lifecycle:compiler:1.1.1")
+    implementation("androidx.lifecycle:lifecycle-extensions:2.0.0")
+    //kapt("androidx.lifecycle:compiler:2.0.0")
 
-    // Dagger
-    implementation("com.google.dagger:dagger:2.16")
-    kapt("com.google.dagger:dagger-compiler:2.16")
-    implementation("com.google.dagger:dagger-android:2.16")
-    kapt("com.google.dagger:dagger-android-processor:2.16")
+    // Koin DI
+    /*implementation("org.koin:koin-android:2.0.0-beta-5")
+    implementation("org.koin:koin-core-ext:2.0.0-beta-5")*/
+    implementation("org.koin:koin-androidx-viewmodel:2.0.0-beta-5")
 
     // Location
     implementation("com.google.android.gms:play-services-location:16.0.0")
@@ -55,7 +54,7 @@ dependencies {
     // Network
     implementation("com.squareup.retrofit2:retrofit:2.5.0")
     implementation("com.squareup.okhttp3:logging-interceptor:3.10.0")
-    implementation("com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2")
+    implementation("ru.gildor.coroutines:kotlin-coroutines-retrofit:1.1.0")
     implementation("com.squareup.moshi:moshi-kotlin:1.8.0")
     implementation("com.squareup.retrofit2:converter-moshi:2.5.0")
 
@@ -66,6 +65,7 @@ dependencies {
     implementation("com.github.fondesa:kpermissions:1.0.0")
 
     // Testing
+    implementation("org.koin:koin-test:1.0.2") // DI
     testImplementation("junit:junit:4.12")
     androidTestImplementation("androidx.test.ext:junit:1.1.0")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.1.1")

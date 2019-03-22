@@ -1,14 +1,22 @@
 package dev.jishin.android.weatherapp
 
+import android.app.Activity
 import android.app.Application
-import dev.jishin.android.weatherapp.di.networkModule
-import dev.jishin.android.weatherapp.di.vmModule
-import org.koin.android.ext.koin.androidContext
-import org.koin.android.ext.koin.androidLogger
-import org.koin.core.context.startKoin
+import android.app.Service
+import dagger.android.*
+import dev.jishin.android.weatherapp.di.DaggerAppComponent
+import dev.jishin.android.weatherapp.di.modules.AppModule
+import dev.jishin.android.weatherapp.utils.registerActivityCreatedCallbacks
 import timber.log.Timber
+import javax.inject.Inject
 
-class App : Application() {
+
+class App : Application(), HasActivityInjector, HasServiceInjector {
+
+    @Inject
+    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
+    @Inject
+    lateinit var dispatchingServiceInjector: DispatchingAndroidInjector<Service>
 
     override fun onCreate() {
         super.onCreate()
@@ -16,11 +24,24 @@ class App : Application() {
         // Initialize Timber Logging
         Timber.plant(Timber.DebugTree())
 
-        // Initialize Koin DI
-        startKoin {
-            androidContext(this@App)
-            androidLogger()
-            modules(networkModule, vmModule)
+        // Initialize Dagger app component
+        initDagger()
+    }
+
+    private fun initDagger() {
+
+        DaggerAppComponent.builder()
+            .appModule(AppModule(this))
+            .build()
+            .inject(this)
+
+        registerActivityCreatedCallbacks { activity ->
+            if (activity is HasFragmentInjector) {
+                AndroidInjection.inject(activity)
+            }
         }
     }
+
+    override fun activityInjector() = dispatchingAndroidInjector
+    override fun serviceInjector() = dispatchingServiceInjector
 }

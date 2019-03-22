@@ -43,10 +43,11 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-extensions:2.0.0")
     //kapt("androidx.lifecycle:compiler:2.0.0")
 
-    // Koin DI
-    /*implementation("org.koin:koin-android:2.0.0-beta-5")
-    implementation("org.koin:koin-core-ext:2.0.0-beta-5")*/
-    implementation("org.koin:koin-androidx-viewmodel:2.0.0-beta-5")
+    // Dagger DI
+    implementation("com.google.dagger:dagger:2.16")
+    kapt("com.google.dagger:dagger-compiler:2.16")
+    implementation("com.google.dagger:dagger-android:2.16")
+    kapt("com.google.dagger:dagger-android-processor:2.16")
 
     // Location
     implementation("com.google.android.gms:play-services-location:16.0.0")
@@ -65,7 +66,6 @@ dependencies {
     implementation("com.github.fondesa:kpermissions:1.0.0")
 
     // Testing
-    implementation("org.koin:koin-test:1.0.2") // DI
     testImplementation("junit:junit:4.12")
     androidTestImplementation("androidx.test.ext:junit:1.1.0")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.1.1")

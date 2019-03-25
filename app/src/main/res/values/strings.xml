@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">WeatherApp</string>
+    <string name="loading_indicator">Loading indicator</string>
+    <string name="retry">Retry</string>
+    <string name="error_message">Something went wrong at our end!</string>
 </resources>

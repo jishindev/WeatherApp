@@ -23,6 +23,12 @@ android {
         }
     }
     sourceSets["main"].java.srcDir("src/main/kotlin")
+    sourceSets["androidTest"].java.srcDir("src/androidTest/kotlin")
+    sourceSets["test"].java.srcDir("src/test/kotlin")
+
+  /*  useLibrary("android.test.runner")
+    useLibrary("android.test.base")
+    useLibrary("android.test.mock")*/
 }
 
 dependencies {
@@ -41,7 +47,6 @@ dependencies {
 
     // Lifecycle - ViewModel and LiveData
     implementation("androidx.lifecycle:lifecycle-extensions:2.0.0")
-    //kapt("androidx.lifecycle:compiler:2.0.0")
 
     // Dagger DI
     implementation("com.google.dagger:dagger:2.16")
@@ -56,8 +61,8 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.5.0")
     implementation("com.squareup.okhttp3:logging-interceptor:3.10.0")
     implementation("ru.gildor.coroutines:kotlin-coroutines-retrofit:1.1.0")
-    implementation("com.squareup.moshi:moshi-kotlin:1.8.0")
-    implementation("com.squareup.retrofit2:converter-moshi:2.5.0")
+    implementation("com.google.code.gson:gson:2.8.5")
+    implementation("com.squareup.retrofit2:converter-gson:2.5.0")
 
     // Logging
     implementation("com.jakewharton.timber:timber:4.7.1")
@@ -68,9 +73,9 @@ dependencies {
     // Testing
     testImplementation("junit:junit:4.12")
     androidTestImplementation("androidx.test.ext:junit:1.1.0")
+    androidTestImplementation("androidx.test:runner:1.1.1")
+    androidTestImplementation("androidx.test:rules:1.1.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.1.1")
-
-    // Mock
     testImplementation("org.mockito:mockito-core:2.25.0")
     androidTestImplementation("org.mockito:mockito-android:2.25.0")
     testImplementation("com.squareup.okhttp3:mockwebserver:3.13.1")

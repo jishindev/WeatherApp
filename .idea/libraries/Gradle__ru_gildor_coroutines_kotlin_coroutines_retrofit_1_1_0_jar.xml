@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: ru.gildor.coroutines:kotlin-coroutines-retrofit:1.1.0@jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/ru.gildor.coroutines/kotlin-coroutines-retrofit/1.1.0/db3ed2219eb71a5c09f2819057e73570350105c9/kotlin-coroutines-retrofit-1.1.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/ru.gildor.coroutines/kotlin-coroutines-retrofit/1.1.0/c28316bf22dbb772a6ee5f6c2bf26517261e3410/kotlin-coroutines-retrofit-1.1.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

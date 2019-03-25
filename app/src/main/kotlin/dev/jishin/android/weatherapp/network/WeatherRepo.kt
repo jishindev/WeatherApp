@@ -9,5 +9,4 @@ class WeatherRepo @Inject constructor(private val weatherApi: WeatherApi) {
 
     suspend fun getForecast(cityName: String?): Result<WeatherResponse> =
         weatherApi.getForecast(cityName).awaitResult()
-
 }

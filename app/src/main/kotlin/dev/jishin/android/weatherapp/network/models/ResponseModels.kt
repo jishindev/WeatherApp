@@ -1,26 +1,31 @@
 package dev.jishin.android.weatherapp.network.models
 
-import com.squareup.moshi.Json
+import com.google.gson.annotations.SerializedName
+
 
 data class WeatherResponse(
-    @Json(name = "location") val location: LocationData,
-    @Json(name = "current") val current: CurrentWeather,
-    @Json(name = "forecast") val forecast: List<Forecast>
-) {
-    data class LocationData(
-        @Json(name = "name") val name: String
-    )
+    @SerializedName("location") val location: LocationData,
+    @SerializedName("current") val current: CurrentWeather,
+    @SerializedName("forecast") val forecast: Forecast
+)
 
-    data class CurrentWeather(
-        @Json(name = "temp_c") val tempC: Float
-    )
+data class LocationData(
+     @SerializedName("name") val name: String?
+)
 
-    data class Forecast(
-        @Json(name = "date") val date: String,
-        @Json(name = "day") val day: Day
-    ) {
-        data class Day(
-            @Json(name = "avgtemp_c") val averageTempC: Float
-        )
-    }
-}
+data class CurrentWeather(
+     @SerializedName("temp_c") val tempC: Float?
+)
+
+data class Forecast(
+     @SerializedName("forecastday") val forecastDay: List<ForecastDay>?
+)
+
+data class ForecastDay(
+     @SerializedName("date") val date: String?,
+     @SerializedName("day") val day: Day?
+)
+
+data class Day(
+     @SerializedName("avgtemp_c") val averageTempC: Float?
+)

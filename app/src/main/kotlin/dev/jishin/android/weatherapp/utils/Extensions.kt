@@ -5,8 +5,13 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.pm.PackageManager
+import android.net.ConnectivityManager
 import android.os.Bundle
+import android.view.View
+import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -61,3 +66,20 @@ fun Activity.ifLocationPermGranted(onDenied: () -> Unit = {}, onAccepted: () -> 
     }
     permBuilder.send()
 }
+
+fun Context.isConnected(): Boolean {
+    val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+    val networkInfo = connectivityManager?.activeNetworkInfo
+    return networkInfo?.isConnected ?: false
+}
+
+fun View.show() {
+    visibility = View.VISIBLE
+}
+
+fun View.hide(makeGone: Boolean = true) {
+    visibility = if (makeGone) View.GONE else View.INVISIBLE
+}
+
+fun Context.getColorVal(@ColorRes colorResId: Int) =
+    ContextCompat.getColor(this, colorResId)

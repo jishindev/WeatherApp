@@ -27,9 +27,6 @@ class LocationService : Service() {
     private val binder = LocalBinder()
     private lateinit var locationCallback: LocationCallback
     private var location: Location? = null
-    private lateinit var serviceHandler: Handler
-    private var isChangingConfig = false
-
 
     @SuppressLint("NewApi")
     override fun onCreate() {
@@ -39,15 +36,11 @@ class LocationService : Service() {
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 super.onLocationResult(locationResult)
+                Timber.i("onLocationResult, locationResult: $locationResult")
                 locationResult ?: return
                 onNewLocation(locationResult.lastLocation)
             }
         }
-
-        val handlerThread = HandlerThread(javaClass.simpleName)
-        handlerThread.start()
-        serviceHandler = Handler(handlerThread.looper)
-
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -57,23 +50,9 @@ class LocationService : Service() {
         return START_NOT_STICKY
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration?) {
-        super.onConfigurationChanged(newConfig)
-        isChangingConfig = true
-    }
-
     override fun onBind(intent: Intent?): IBinder? {
         Timber.i("onBind, intent: $intent")
-        stopForeground(true)
-        isChangingConfig = false
         return binder
-    }
-
-    override fun onRebind(intent: Intent?) {
-        Timber.i("onRebind, intent: $intent")
-        stopForeground(true)
-        isChangingConfig = false
-        super.onRebind(intent)
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
@@ -83,8 +62,8 @@ class LocationService : Service() {
     }
 
     override fun onDestroy() {
+        Timber.i("onDestroy")
         stopLocationUpdates()
-        serviceHandler.removeCallbacksAndMessages(null)
         super.onDestroy()
     }
 
@@ -96,6 +75,7 @@ class LocationService : Service() {
     }
 
     private fun broadcastLocation(location: Location?) {
+        Timber.i("broadcastLocation, location: $location")
         location ?: return
 
         Intent(ACTION_BROADCAST).apply {
@@ -109,7 +89,7 @@ class LocationService : Service() {
 
     fun startLocationUpdates() {
         Timber.i("startLocationUpdates() called")
-
+        getLastLocation()
         isRequestingLocationUpdates = true
         startService(Intent(applicationContext, LocationService::class.java))
         try {
@@ -120,7 +100,7 @@ class LocationService : Service() {
         }
     }
 
-    private fun stopLocationUpdates() {
+    fun stopLocationUpdates() {
         Timber.i("stopLocationUpdates() called")
         try {
             fusedLocationClient.removeLocationUpdates(locationCallback)
@@ -134,10 +114,12 @@ class LocationService : Service() {
 
     @SuppressLint("MissingPermission")
     private fun getLastLocation() {
+        Timber.i("getLastLocation()")
         if (isLocationPermsGranted()) {
             fusedLocationClient.lastLocation.addOnCompleteListener { task ->
                 if (task.isSuccessful && task.result != null) {
                     location = task.result
+                    onNewLocation(location)
                 } else {
                     Timber.e("error getLastLocation, task: $task")
                 }
@@ -151,8 +133,8 @@ class LocationService : Service() {
     }
 
     companion object {
-        const val KEY_LOCATION = "Location"
-        const val ACTION_BROADCAST = "RoadRunnerBroadcast"
+        const val KEY_LOCATION = "dev.jishin.android.weatherapp.home.services.Location"
+        const val ACTION_BROADCAST = "dev.jishin.android.weatherapp.home.services.LocationBroadcast"
 
         val locationRequest by lazy {
             LocationRequest().apply {
